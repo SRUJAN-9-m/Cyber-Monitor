@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CyberMonitor – Project Report</title>
+<style>
+  /* ── Reset & base ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* ── Layout ── */
+  .page { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* ── Header ── */
+  .hero {
+    background: linear-gradient(135deg, #1c2d4f 0%, #0d1117 60%);
+    border: 1px solid #1f6feb;
+    border-radius: 14px;
+    padding: 44px 40px;
+    margin-bottom: 48px;
+    text-align: center;
+  }
+  .hero .badge {
+    display: inline-block;
+    background: #1f6feb22;
+    color: #58a6ff;
+    border: 1px solid #1f6feb55;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    margin-bottom: 18px;
+  }
+  .hero h1 { font-size: 2.4rem; font-weight: 800; color: #ffffff; letter-spacing: 0.5px; }
+  .hero h1 span { color: #58a6ff; }
+  .hero .sub {
+    margin-top: 12px;
+    color: #8b949e;
+    font-size: 1rem;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .meta-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .meta-item { text-align: center; }
+  .meta-item .val { font-size: 1.4rem; font-weight: 700; color: #58a6ff; }
+  .meta-item .lbl { font-size: 0.72rem; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ── Section ── */
+  section { margin-bottom: 48px; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #21262d;
+  }
+  .section-header .icon { font-size: 1.3rem; }
+  .section-header h2 { font-size: 1.1rem; font-weight: 700; color: #e6edf3; letter-spacing: 0.3px; }
+  .section-header .num {
+    margin-left: auto;
+    background: #1f6feb22;
+    color: #58a6ff;
+    border: 1px solid #1f6feb44;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── Cards grid ── */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 20px 18px;
+  }
+  .card .c-icon { font-size: 1.5rem; margin-bottom: 10px; }
+  .card .c-title { font-size: 0.72rem; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .card .c-body  { font-size: 0.9rem; color: #c9d1d9; }
+  .card.accent-blue  { border-top: 3px solid #58a6ff; }
+  .card.accent-green { border-top: 3px solid #3fb950; }
+  .card.accent-red   { border-top: 3px solid #f85149; }
+  .card.accent-amber { border-top: 3px solid #d29922; }
+  .card.accent-purple{ border-top: 3px solid #a371f7; }
+
+  /* ── Table ── */
+  table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+  thead tr { background: #21262d; }
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    color: #8b949e;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.9px;
+    font-weight: 600;
+  }
+  td { padding: 10px 14px; border-bottom: 1px solid #21262d; color: #c9d1d9; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #161b22; }
+  .tbl-wrap { background: #0d1117; border: 1px solid #30363d; border-radius: 10px; overflow: hidden; }
+
+  /* ── Badge ── */
+  .pill {
+    display: inline-block;
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .pill-blue   { background:#1f6feb22; color:#58a6ff; border:1px solid #1f6feb55; }
+  .pill-green  { background:#23863622; color:#3fb950; border:1px solid #23863655; }
+  .pill-red    { background:#f8514922; color:#f85149; border:1px solid #f8514955; }
+  .pill-amber  { background:#d2992222; color:#d29922; border:1px solid #d2992255; }
+  .pill-purple { background:#a371f722; color:#a371f7; border:1px solid #a371f755; }
+  .pill-grey   { background:#8b949e22; color:#8b949e; border:1px solid #8b949e55; }
+
+  /* ── Code block ── */
+  pre {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 18px 20px;
+    overflow-x: auto;
+    font-size: 0.83rem;
+    line-height: 1.6;
+    color: #e6edf3;
+    font-family: "Cascadia Code", "Consolas", monospace;
+  }
+  code { color: #79c0ff; }
+
+  /* ── Timeline ── */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 7px; top: 6px; bottom: 6px;
+    width: 2px;
+    background: #21262d;
+  }
+  .tl-item { position: relative; margin-bottom: 24px; }
+  .tl-item::before {
+    content: "";
+    position: absolute;
+    left: -24px; top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: #1f6feb;
+    border: 2px solid #0d1117;
+  }
+  .tl-item .tl-title { font-weight: 600; color: #e6edf3; font-size: 0.95rem; }
+  .tl-item .tl-desc  { color: #8b949e; font-size: 0.85rem; margin-top: 2px; }
+
+  /* ── SVG bar chart ── */
+  .chart-wrap { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px 24px; }
+  .chart-title { font-size: 0.78rem; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+
+  /* ── Callout ── */
+  .callout {
+    background: #1c2d4f;
+    border-left: 4px solid #1f6feb;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    color: #c9d1d9;
+    font-size: 0.88rem;
+    margin: 16px 0;
+  }
+  .callout.warn { background: #2d2008; border-color: #d29922; }
+  .callout strong { color: #e6edf3; }
+
+  /* ── Footer ── */
+  footer {
+    margin-top: 64px;
+    padding-top: 20px;
+    border-top: 1px solid #21262d;
+    text-align: center;
+    color: #8b949e;
+    font-size: 0.75rem;
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 28px 20px; }
+    .hero h1 { font-size: 1.7rem; }
+    .meta-row { gap: 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══ HERO ══ -->
+  <div class="hero">
+    <div class="badge">Project Report</div>
+    <h1>🛡️ Cyber<span>Monitor</span></h1>
+    <p class="sub">A beginner-friendly cybersecurity dashboard — local Windows Security Event Log analysis as a Splunk alternative.</p>
+    <div class="meta-row">
+      <div class="meta-item"><div class="val">1</div><div class="lbl">Source File</div></div>
+      <div class="meta-item"><div class="val">505</div><div class="lbl">Lines of Code</div></div>
+      <div class="meta-item"><div class="val">3</div><div class="lbl">Dependencies</div></div>
+      <div class="meta-item"><div class="val">10</div><div class="lbl">Event IDs Tracked</div></div>
+      <div class="meta-item"><div class="val">7</div><div class="lbl">Dashboard Components</div></div>
+    </div>
+  </div>
+
+  <!-- ══ 1. EXECUTIVE SUMMARY ══ -->
+  <section>
+    <div class="section-header">
+      <span class="icon">📄</span>
+      <h2>Executive Summary</h2>
+      <span class="num">Section 1</span>
+    </div>
+    <p style="color:#c9d1d9; margin-bottom:14px;">
+      CyberMonitor is a single-file Python web application that gives beginners a practical, hands-on tool for
+      understanding Windows Security Event logs without requiring a commercial SIEM platform like Splunk or Microsoft Sentinel.
+    </p>
+    <p style="color:#c9d1d9; margin-bottom:14px;">
+      The application is built entirely on open-source libraries, runs locally on any Windows, macOS, or Linux machine
+      with Python installed, and requires no database, server configuration, or cloud account.
+    </p>
+    <div class="callout">
+      <strong>Key Design Principle:</strong> Zero-configuration startup. The app generates realistic mock data automatically,
+      so a user can learn the interface before connecting any real log source.
+    </div>
+  </section>
+
+  <!-- ══ 2. TECH STACK ══ -->
+  <section>
+    <div class="section-header">
+      <span class="icon">🧰</span>
+      <h2>Technology Stack</h2>
+      <span class="num">Section 2</span>
+    </div>
+    <div class="card-grid">
+      <div class="card accent-blue">
+        <div class="c-icon">🐍</div>
+        <div class="c-title">Language</div>
+        <div class="c-body">Python 3.9+ (tested on 3.14)</div>
+      </div>
+      <div class="card accent-green">
+        <div class="c-icon">⚡</div>
+        <div class="c-title">Web Framework</div>
+        <div class="c-body">Streamlit ≥ 1.32.0</div>
+      </div>
+      <div class="card accent-amber">
+        <div class="c-icon">📊</div>
+        <div class="c-title">Charting</div>
+        <div class="c-body">Altair ≥ 5.3.0 (Vega-Lite)</div>
+      </div>
+      <div class="card accent-purple">
+        <div class="c-icon">🗃️</div>
+        <div class="c-title">Data Processing</div>
+        <div class="c-body">Pandas ≥ 2.2.0</div>
+      </div>
+      <div class="card accent-red">
+        <div class="c-icon">🎨</div>
+        <div class="c-title">Theming</div>
+        <div class="c-body">Injected CSS (GitHub-dark palette)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 3. FEATURES ══ -->
+  <section>
+    <div class="section-header">
+      <span class="icon">✨</span>
+      <h2>Feature Overview</h2>
+      <span class="num">Section 3</span>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Component</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Auto mock data generation (500 events)</td><td><code>generate_mock_data()</code></td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>CSV / .log file upload &amp; parsing</td><td><code>load_uploaded_file()</code></td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>Column alias normalisation</td><td><code>COLUMN_ALIASES</code> dict</td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>KPI card — Total Events</td><td>HTML/CSS card</td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>KPI card — Failed Logins (4625)</td><td>HTML/CSS card</td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>KPI card — Successful Logins (4624)</td><td>HTML/CSS card</td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>KPI card — Privilege Escalations (4672)</td><td>HTML/CSS card</td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>Sidebar filter — Event ID</td><td><code>st.multiselect</code></td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>Sidebar filter — Severity / Level</td><td><code>st.multiselect</code></td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>Sidebar filter — Source Account</td><td><code>st.multiselect</code></td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>Event volume over time chart</td><td>Altair stacked area</td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>Event log data table</td><td><code>st.dataframe</code></td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>Top accounts bar chart</td><td>Altair horizontal bar</td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>Event ID donut chart</td><td>Altair arc/pie</td><td><span class="pill pill-green">✅ Done</span></td></tr>
+          <tr><td>Full dark theme</td><td>Injected CSS</td><td><span class="pill pill-green">✅ Done</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ 4. ARCHITECTURE ══ -->
+  <section>
+    <div class="section-header">
+      <span class="icon">🏗️</span>
+      <h2>Application Architecture</h2>
+      <span class="num">Section 4</span>
+    </div>
+    <p style="color:#8b949e; font-size:0.85rem; margin-bottom:18px;">Execution flow on each browser interaction (Streamlit reruns the entire script top-to-bottom on every widget change):</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-title">1 · Page Config + CSS</div>
+        <div class="tl-desc"><code>st.set_page_config()</code> must be the first call. CSS is injected globally via <code>st.markdown(unsafe_allow_html=True)</code>.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">2 · Sidebar — File Uploader</div>
+        <div class="tl-desc">The <code>st.file_uploader</code> widget is rendered. Its return value determines whether real or mock data is loaded.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">3 · Data Load Pipeline</div>
+        <div class="tl-desc">If a file is uploaded → <code>load_uploaded_file()</code> → <code>normalise_columns()</code>. Otherwise → <code>generate_mock_data()</code>. Result is a normalised <code>DataFrame</code>.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">4 · Sidebar — Dynamic Filters</div>
+        <div class="tl-desc">Multiselect widgets are populated with unique values from the loaded DataFrame. Filters are applied to produce <code>filtered</code>.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-title">5 · Dashboard Render</div>
+        <div class="tl-desc">KPI cards, charts, and tables all consume <code>filtered</code>. Any filter change triggers a full rerun, keeping all components in sync automatically.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 5. EVENT ID REFERENCE ══ -->
+  <section>
+    <div class="section-header">
+      <span class="icon">🔐</span>
+      <h2>Windows Security Event ID Reference</h2>
+      <span class="num">Section 5</span>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>Event ID</th><th>Description</th><th>Severity</th><th>Security Relevance</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>4624</strong></td><td>Successful Logon</td><td><span class="pill pill-blue">Information</span></td><td>Baseline — track unusual hours or locations</td></tr>
+          <tr><td><strong>4625</strong></td><td>Failed Logon</td><td><span class="pill pill-red">Critical</span></td><td>Brute-force indicator when count spikes</td></tr>
+          <tr><td><strong>4648</strong></td><td>Logon with Explicit Credentials</td><td><span class="pill pill-amber">Warning</span></td><td>Pass-the-hash or credential harvesting</td></tr>
+          <tr><td><strong>4672</strong></td><td>Special Privileges Assigned</td><td><span class="pill pill-amber">Warning</span></td><td>Privilege escalation — monitor non-admin accounts</td></tr>
+          <tr><td><strong>4688</strong></td><td>New Process Created</td><td><span class="pill pill-blue">Information</span></td><td>Malware execution detection</td></tr>
+          <tr><td><strong>4698</strong></td><td>Scheduled Task Created</td><td><span class="pill pill-amber">Warning</span></td><td>Persistence mechanism</td></tr>
+          <tr><td><strong>4720</strong></td><td>User Account Created</td><td><span class="pill pill-blue">Information</span></td><td>Unauthorised account creation</td></tr>
+          <tr><td><strong>4732</strong></td><td>Member Added to Security Group</td><td><span class="pill pill-amber">Warning</span></td><td>Lateral movement / privilege creep</td></tr>
+          <tr><td><strong>4756</strong></td><td>Member Added to Universal Group</td><td><span class="pill pill-amber">Warning</span></td><td>Domain-wide privilege escalation</td></tr>
+          <tr><td><strong>4771</strong></td><td>Kerberos Pre-Auth Failed</td><td><span class="pill pill-red">Error</span></td><td>AS-REP roasting or password spray</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ 6. SETUP GUIDE ══ -->
+  <section>
+    <div class="section-header">
+      <span class="icon">🚀</span>
+      <h2>Setup &amp; Usage Guide</h2>
+      <span class="num">Section 6</span>
+    </div>
+
+    <p style="color:#c9d1d9; margin-bottom:12px;"><strong>Step 1 — Install dependencies</strong></p>
+    <pre><code>pip install -r requirements.txt</code></pre>
+
+    <p style="color:#c9d1d9; margin: 16px 0 12px;"><strong>Step 2 — Launch the dashboard</strong></p>
+    <pre><code>python -m streamlit run app.py</code></pre>
+
+    <div class="callout warn">
+      <strong>Note:</strong> If <code>streamlit</code> is not recognised as a command, always use <code>python -m streamlit</code>.
+      This happens when pip installs to user site-packages which may not be on your system PATH.
+    </div>
+
+    <p style="color:#c9d1d9; margin: 20px 0 12px;"><strong>Step 3 — Export real Windows Security logs (PowerShell)</strong></p>
+    <pre><code>Get-WinEvent -LogName Security -MaxEvents 2000 |
+  Select-Object TimeCreated, Id, LevelDisplayName, Message, ProviderName |
+  Export-Csv -Path "$env:USERPROFILE\Desktop\security_events.csv" -NoTypeInformation</code></pre>
+
+    <p style="color:#c9d1d9; margin: 16px 0 8px;"><strong>Step 4 — Upload to CyberMonitor</strong></p>
+    <p style="color:#8b949e; font-size:0.88rem;">In the left sidebar, click <em>Browse files</em> and select your exported CSV. The dashboard reloads automatically with your real data.</p>
+  </section>
+
+  <!-- ══ 7. PROJECT FILES ══ -->
+  <section>
+    <div class="section-header">
+      <span class="icon">📁</span>
+      <h2>Project File Structure</h2>
+      <span class="num">Section 7</span>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>File</th><th>Purpose</th><th>Size</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>app.py</code></td><td>Main Streamlit application — entire dashboard in one file</td><td>~505 lines</td></tr>
+          <tr><td><code>requirements.txt</code></td><td>Python package dependencies with minimum version pins</td><td>3 lines</td></tr>
+          <tr><td><code>README.md</code></td><td>Full usage guide, event ID reference, PowerShell commands</td><td>~150 lines</td></tr>
+          <tr><td><code>report.html</code></td><td>This project report — open in any browser, no server needed</td><td>Self-contained</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ══ 8. LIMITATIONS & FUTURE WORK ══ -->
+  <section>
+    <div class="section-header">
+      <span class="icon">🔭</span>
+      <h2>Limitations &amp; Future Improvements</h2>
+      <span class="num">Section 8</span>
+    </div>
+    <div class="card-grid">
+      <div class="card accent-red">
+        <div class="c-icon">⚠️</div>
+        <div class="c-title">Current Limitation</div>
+        <div class="c-body">No real-time log streaming — requires manual CSV export and re-upload</div>
+      </div>
+      <div class="card accent-red">
+        <div class="c-icon">⚠️</div>
+        <div class="c-title">Current Limitation</div>
+        <div class="c-body">No alert / threshold notifications for spike detection</div>
+      </div>
+      <div class="card accent-red">
+        <div class="c-icon">⚠️</div>
+        <div class="c-title">Current Limitation</div>
+        <div class="c-body">No persistent storage — data resets on each file upload</div>
+      </div>
+      <div class="card accent-green">
+        <div class="c-icon">💡</div>
+        <div class="c-title">Future: Live Tailing</div>
+        <div class="c-body">Use Windows Event Log API (<code>win32evtlog</code>) to stream events in real time</div>
+      </div>
+      <div class="card accent-green">
+        <div class="c-icon">💡</div>
+        <div class="c-title">Future: Alerting</div>
+        <div class="c-body">Add configurable thresholds — e.g., email alert when 4625 count exceeds 50/hour</div>
+      </div>
+      <div class="card accent-green">
+        <div class="c-icon">💡</div>
+        <div class="c-title">Future: SQLite Storage</div>
+        <div class="c-body">Persist uploaded logs to a local SQLite database for historical comparison</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer>
+    <p>🛡️ CyberMonitor &nbsp;·&nbsp; Built with Python &amp; Streamlit &nbsp;·&nbsp; For educational &amp; internal monitoring use only</p>
+    <p style="margin-top:6px;">Made with IBM Bob</p>
+  </footer>
+
+</div>
+</body>
+</html>
